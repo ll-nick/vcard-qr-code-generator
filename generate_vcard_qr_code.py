@@ -1,5 +1,6 @@
 import qrcode
 
+
 # QR Code settings
 QR_VERSION = 1
 QR_ERROR_CORRECTION = qrcode.constants.ERROR_CORRECT_L
