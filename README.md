@@ -1,9 +1,9 @@
 # vCard QR Code Generator
-This is a simple Python script to interactively generate a QR Code containing vCard information. It utilizes the qrcode library to create the QR Code image.
+This is a simple Python script to interactively generate a QR Code containing a vCard.
 
 ## Requirements
 - Python 3.x
-- qrcode Python library
+- [qrcode](https://github.com/lincolnloop/python-qrcode) Python library
 
 ## Installation
 1. **Clone the repository:**
@@ -38,23 +38,14 @@ Follow the prompts to enter the vCard information:
 
 Once all information is provided, the script will generate a vCard in QR Code format and save it as `vCardQR.png` in the current directory.
 
-## Example
-Here's a sample interaction when running the script:
-
-```console
-$ python3 generate_vcard_qr_code.py
-Please enter the following information for the vCard:
-First Name: John
-Last Name: Doe
-Organization: Example Inc.
-URL: https://example.com
-Email: john.doe@example.com
-Phone: +1234567890
-Street + number: 123 Main St
-City: Anytown
-Postal Code: 12345
-Country: USA
-vCard QR code generated and saved as 'vCardQR.png'.
-```
-
 You can then scan `vCardQR.png` using a QR Code scanner app to import the vCard information into your contacts.
+
+## Customization
+
+You can customize the QR code settings by modifying the constants in the script:
+- `QR_VERSION`: QR code version (default: 1)
+- `QR_ERROR_CORRECTION`: Error correction level (default: qrcode.constants.ERROR_CORRECT_L)
+- `QR_BOX_SIZE`: Size of each QR code box (default: 10)
+- `QR_BORDER`: Size of the QR code border (default: 4)
+
+Feel free to adjust these settings to suit your requirements.
