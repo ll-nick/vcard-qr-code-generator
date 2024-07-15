@@ -1,52 +1,58 @@
 import qrcode
 
-
 # QR Code settings
 QR_VERSION = 1
 QR_ERROR_CORRECTION = qrcode.constants.ERROR_CORRECT_L
 QR_BOX_SIZE = 10
 QR_BORDER = 4
 
+class ValidationError(Exception):
+    pass
+
 def get_vcard_data():
     print("Please enter the following information for the vCard:")
     
     # Input collection with basic validation
-    first_name = input("First Name: ").strip()
-    last_name = input("Last Name: ").strip()
-    organization = input("Organization: ").strip()
-    url = input("URL: ").strip()
-    email = input("Email: ").strip()
-    phone = input("Phone: ").strip()
-    street = input("Street + number: ").strip()
-    city = input("City: ").strip()
-    postal_code = input("Postal Code: ").strip()
-    country = input("Country: ").strip()
+    try:
+        first_name = input("First Name: ").strip()
+        last_name = input("Last Name: ").strip()
+        organization = input("Organization: ").strip()
 
-    # Ensure required fields are not empty
-    if not (first_name and last_name and email and phone and street and city and postal_code and country):
-        print("Error: Required fields cannot be empty.")
-        return None
+        # Ensure required fields are not empty
+        if not (first_name and last_name and organization):
+            raise ValidationError("Error: First Name, Last Name, and Organization are required fields.")
 
-    # Construct vCard data
-    vcard_data = f"""BEGIN:VCARD
+        email = input("Email (optional): ").strip()
+        phone = input("Phone (optional): ").strip()
+        street = input("Street + number (optional): ").strip()
+        city = input("City (optional): ").strip()
+        postal_code = input("Postal Code (optional): ").strip()
+        country = input("Country (optional): ").strip()
+        url = input("URL (optional): ").strip()
+
+        # Construct vCard data
+        vcard_data = f"""BEGIN:VCARD
 VERSION:3.0
 N:{last_name};{first_name}
 FN:{first_name} {last_name}
-"""
-    if organization:
-        vcard_data += f"ORG:{organization}\n"
-    if url:
-        vcard_data += f"URL:{url}\n"
-    if email:
-        vcard_data += f"EMAIL;TYPE=work:{email}\n"
-    if phone:
-        vcard_data += f"TEL;TYPE=work:{phone}\n"
-    if street or city or postal_code or country:
-        vcard_data += f"ADR;TYPE=intl,work,postal,parcel:;;{street};{city};;{postal_code};{country}\n"
+ORG:{organization}\n"""
+        
+        if email:
+            vcard_data += f"EMAIL;TYPE=work:{email}\n"
+        if phone:
+            vcard_data += f"TEL;TYPE=work:{phone}\n"
+        if street or city or postal_code or country:
+            vcard_data += f"ADR;TYPE=intl,work,postal,parcel:;;{street};{city};;{postal_code};{country}\n"
+        if url:
+            vcard_data += f"URL:{url}\n"
 
-    vcard_data += "END:VCARD"
+        vcard_data += "END:VCARD"
 
-    return vcard_data
+        return vcard_data
+
+    except ValidationError as ve:
+        print(str(ve))
+        return None
 
 def generate_qr_code(data):
     try:
@@ -67,9 +73,13 @@ def generate_qr_code(data):
         print(f"Error generating QR code: {e}")
 
 if __name__ == "__main__":
-    # Generate the vCard data
-    data = get_vcard_data()
+    try:
+        # Generate the vCard data
+        data = get_vcard_data()
 
-    if data:
-        # Create the QR code
-        generate_qr_code(data)
+        if data:
+            # Create the QR code
+            generate_qr_code(data)
+
+    except Exception as e:
+        print(f"Error: {e}")
